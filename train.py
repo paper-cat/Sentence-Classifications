@@ -1,6 +1,8 @@
 import sys
 import pipeline as pp
 import json
+import yaml
+from yaml.scanner import ScannerError
 import os
 
 if __name__ == '__main__':
@@ -12,16 +14,20 @@ if __name__ == '__main__':
     mode_list = ['nsmc']
 
     if len(sys.argv) == 1:
-        sys.exit('No Json file provided')
+        sys.exit('No config file provided')
 
     try:
         path = os.path.abspath('parameters/' + sys.argv[1])
 
-        with open(path) as f:
-            setting = json.load(f)
+        with open(path) as file:
+            setting = yaml.load(file, Loader=yaml.FullLoader)
+            print(setting)
 
-    except json.decoder.JSONDecodeError:
-        sys.exit("Not Correct Json File Provided")
+    except FileNotFoundError:
+        sys.exit('Not yaml file found')
+
+    except ScannerError:
+        sys.exit('Not Correct yaml file')
 
     try:
         model = setting['model'].lower()
@@ -43,9 +49,9 @@ if __name__ == '__main__':
         hyper_params = setting['hyper_parameters']
     except KeyError:
         if mode == 'nsmc':
-            path = os.path.abspath('parameters/nsmc_default.json')
+            path = os.path.abspath('parameters/nsmc_default.yaml')
             with open(path) as f:
-                default_setting = json.load(f)
+                default_setting = yaml.load(file, Loader=yaml.FullLoader)
 
             hyper_params = default_setting['hyper_parameters']
         else:
