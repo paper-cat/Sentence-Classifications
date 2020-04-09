@@ -4,6 +4,8 @@
 
 Implements some sentence(text) classification models by Tensorflow 2
 
+Using tensorflow2.1
+
 
 ### Models
 ---
