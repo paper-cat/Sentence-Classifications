@@ -10,11 +10,10 @@ Using tensorflow2.1
 ### Models
 ---
 1. Convolutional Neural Networks for Sentence Classification by Yoon Kim - https://arxiv.org/pdf/1408.5882v2.pdf
-    - Original model use word embedding, going to be implemented
-    - Currently, Using this model as character base.
-2. (Working On) Character-level Convolutional Networks for Text Classification - https://arxiv.org/pdf/1509.01626v3.pdf
-    - Working On
+    
+2. Character-level Convolutional Networks for Text Classification - https://arxiv.org/pdf/1509.01626v3.pdf
  
+... And More In Future
 
 ### How To Run Train
 ---
