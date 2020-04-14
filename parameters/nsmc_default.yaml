@@ -1,10 +1,15 @@
+name: nsmc_default
 train_file_path: ../dataset/nsmc/ratings.txt
-mode: nsmc
-model: char-cnn-basic
+test_file_path: ../dataset/nsmc/ratings_test.txt
+mode: char
+model: cnn-basic
+dataset: nsmc
 epochs: 10
 batch_size: 50
 test_ratio: 0.3
 learning_rate: 0.001
+train_name : default학습
+max_len : 100
 hyper_parameters:
   embedding: 128
   cnn_filters: 100

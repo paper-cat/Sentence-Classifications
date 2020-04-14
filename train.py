@@ -10,8 +10,8 @@ if __name__ == '__main__':
         run with 1. train file path 2. train mode, 3. model-selection
     '''
 
-    model_list = ['char-cnn-basic', 'char-cnn-custom', 'word-cnn']
-    mode_list = ['nsmc']
+    model_list = ['char-cnn-basic', 'char-cnn-custom', 'word-cnn', 'cnn-basic']
+    mode_list = ['char', 'token']
 
     if len(sys.argv) == 1:
         sys.exit('No config file provided')
@@ -19,7 +19,7 @@ if __name__ == '__main__':
     try:
         path = os.path.abspath('parameters/' + sys.argv[1])
 
-        with open(path) as file:
+        with open(path, encoding='UTF-8') as file:
             setting = yaml.load(file, Loader=yaml.FullLoader)
             print(setting)
 
@@ -32,6 +32,7 @@ if __name__ == '__main__':
     try:
         model = setting['model'].lower()
         mode = setting['mode'].lower()
+        dataset = setting['dataset'].lower()
         train_file_path = setting['train_file_path'].lower()
 
     except KeyError:
@@ -48,9 +49,9 @@ if __name__ == '__main__':
     try:
         hyper_params = setting['hyper_parameters']
     except KeyError:
-        if mode == 'nsmc':
+        if dataset == 'nsmc':
             path = os.path.abspath('parameters/nsmc_default.yaml')
-            with open(path) as f:
+            with open(path, encoding='UTF-8') as f:
                 default_setting = yaml.load(file, Loader=yaml.FullLoader)
 
             hyper_params = default_setting['hyper_parameters']
@@ -62,7 +63,8 @@ if __name__ == '__main__':
     print('{:20}'.format('Train mode'), ': ', mode)
     print('{:20}'.format('Train Data File'), ': ', train_file_path)
 
-    if mode == 'nsmc':
+    if dataset == 'nsmc':
+        print(setting['train_name'])
         pp.naver_movie_pipeline(train_file_path, model, setting)
     else:
         print('Not Implemented')

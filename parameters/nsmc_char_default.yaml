@@ -1,7 +1,6 @@
 batch_size: 1000
 dataset: nsmc
 epochs: 10
-max_len : 100
 hyper_parameters:
   cnn_filters:
   - 256
@@ -30,10 +29,11 @@ hyper_parameters:
   - 3
   out_dim: 2
 learning_rate: 0.001
+max_len: 100
 mode: char
 model: char-cnn-basic
-name: nsmc_custom
+name: nsmc_char_default
 test_file_path: ../dataset/nsmc/ratings_test.txt
-test_ratio: 0
+test_ratio: 0.2
 train_file_path: ../dataset/nsmc/ratings_train.txt
-train_name: nsmc_char_default
+train_name: "default_\uD559\uC2B5"
