@@ -7,11 +7,13 @@ import os
 
 if __name__ == '__main__':
     '''
-        run with 1. train file path 2. train mode, 3. model-selection
+        run with config file
     '''
 
-    model_list = ['char-cnn-basic', 'char-cnn-custom', 'word-cnn', 'cnn-basic']
+    # 설정 가능한 model / mode 리스트
+    model_list = ['BasicCnnClassification', 'CharCnnClassification']
     mode_list = ['char', 'token']
+    dataset_list = ['nsmc', 'imdb']
 
     if len(sys.argv) == 1:
         sys.exit('No config file provided')
@@ -23,6 +25,8 @@ if __name__ == '__main__':
             setting = yaml.load(file, Loader=yaml.FullLoader)
             print(setting)
 
+        file.close()
+
     except FileNotFoundError:
         sys.exit('Not yaml file found')
 
@@ -33,12 +37,11 @@ if __name__ == '__main__':
         model = setting['model'].lower()
         mode = setting['mode'].lower()
         dataset = setting['dataset'].lower()
-        train_file_path = setting['train_file_path'].lower()
 
     except KeyError:
-        sys.exit("Can not find Model, mode, or train file path from json")
+        sys.exit("Can not find Model, mode, or dataset from json")
 
-    if model not in model_list:
+    if model not in [x.lower() for x in model_list]:
         print("Wrong or Not Contained Model, Please Choose in ", model_list)
         sys.exit()
 
@@ -46,25 +49,33 @@ if __name__ == '__main__':
         print("Wrong or Not Contained Mode, Please Choose in ", mode_list)
         sys.exit()
 
+    if dataset not in dataset_list:
+        print("Wrong or Not Contained dataset, Please Choose in ", mode_list)
+        sys.exit()
+
     try:
         hyper_params = setting['hyper_parameters']
+
+    # hyper parameter 없으면, default 값에서 가져옴
     except KeyError:
-        if dataset == 'nsmc':
-            path = os.path.abspath('parameters/nsmc_default.yaml')
+        if model == 'BasicCnnClassification' or model == 'CharCnnClassification':
+            path = os.path.abspath('parameters/default_parameter.yaml')
             with open(path, encoding='UTF-8') as f:
                 default_setting = yaml.load(file, Loader=yaml.FullLoader)
 
             hyper_params = default_setting['hyper_parameters']
         else:
-            print('not yet implemented')
+            print('not yet implemented model')
             sys.exit()
+    # 파라미터 없으니 채움
     setting['hyper_parameters'] = hyper_params
 
-    print('{:20}'.format('Train mode'), ': ', mode)
-    print('{:20}'.format('Train Data File'), ': ', train_file_path)
+    # dataset 에 맞는 path 설정
+    path = os.path.abspath('datasets/dataset_setting.yaml')
+    with open(path, encoding='UTF-8') as file:
+        dataset_path = yaml.load(file, Loader=yaml.FullLoader)
 
-    if dataset == 'nsmc':
-        print(setting['train_name'])
-        pp.naver_movie_pipeline(train_file_path, model, setting)
-    else:
-        print('Not Implemented')
+    train_path = dataset_path['nsmc']['train']
+    test_path = dataset_path['nsmc']['test']
+
+    pp.train_pipeline(train_path, model, setting)

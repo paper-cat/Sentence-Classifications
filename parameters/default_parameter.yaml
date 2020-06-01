@@ -1,13 +1,10 @@
-name: nsmc_default
-mode: char
-model: BasicCnnClassification
-dataset: nsmc
+name: defulat_paramter
 test_ratio: 0.3
 max_len : 100
 hyper_parameters:
+  epochs: 10
+  batch_size: 50
   learning_rate: 0.001
-  epochs: 1
-  batch_size: 1024
   embedding: 128
   cnn_filters: 100
   kernel_size:

@@ -1,0 +1,8 @@
+nsmc:
+  train: datasets/nsmc/ratings_train.txt
+  test: datasets/nsmc/ratings_test.txt
+
+imdb:
+  train: None
+  test: None
+

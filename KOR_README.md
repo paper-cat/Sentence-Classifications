@@ -1,7 +1,8 @@
 # 문장 분류
 여러 문장 분류 모델들을 Tensorflow2 로 구현
 
-### 모델
+###모델
+
 ---
 1. Convolutional Neural Networks for Sentence Classification by Yoon Kim - https://arxiv.org/pdf/1408.5882v2.pdf
 
@@ -9,8 +10,10 @@
 
 계속 추가중입니다.
 
-### 학습 실행
 ---
+###학습 실행 방법
+
+템플릿:
 <pre><code>python train.py config-file</code></pre>
 
 <pre><code>python train.py nsmc_default.yaml</code></pre>

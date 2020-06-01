@@ -44,7 +44,21 @@ example.
 2. Future Data Set:
     - IMDb 
 
- 
+*** Put datasets in this directories.
+
+dataset
+- nsmc
+    - ratings.txt
+    - ratings_train.txt
+    - ratings_test.txt
+ - imbd_revies
+    - plain_text
+        - 1.0.0
+            - dataset_info.json
+            - imdb_reviews-test
+            - imdb_reviews-train
+            - label.labels.txt
+    
 
 ### (Working On) Edit Config file to use your own dataset, hyper parameters
 ---

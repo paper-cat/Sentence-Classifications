@@ -1,0 +1,35 @@
+name: nsmc_charcnn
+mode: char
+model: CharCnnClassification
+dataset: nsmc
+test_ratio: 0.3
+max_len: 100
+hyper_parameters:
+  learning_rate: 0.001
+  epochs: 20
+  batch_size: 1024
+  embedding: 128
+  cnn_filters:
+    - 1024
+    - 1024
+    - 1024
+    - 1024
+    - 1024
+    - 1024
+  kernel_size:
+    - 7
+    - 7
+    - 3
+    - 3
+    - 3
+    - 3
+  dropout: 0.5
+  hidden_units: 512
+  max_pools:
+    - 3
+    - 3
+    - 0
+    - 0
+    - 0
+    - 3
+
