@@ -35,8 +35,14 @@ if __name__ == '__main__':
     with open(path, encoding='UTF-8') as file:
         dataset_path = yaml.load(file, Loader=yaml.FullLoader)
 
-    train_path = dataset_path['nsmc']['train']
-    test_path = dataset_path['nsmc']['test']
-
     if dataset == 'nsmc':
-        pp.single_prediction(test_path, model, setting, text)
+        train_path = dataset_path['nsmc']['train']
+        test_path = dataset_path['nsmc']['test']
+    elif dataset == 'imdb':
+        train_path = dataset_path['imdb']['train']
+        test_path = dataset_path['imdb']['test']
+
+    else:
+        test_path = None
+
+    pp.single_prediction(test_path, model, setting, text)

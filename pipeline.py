@@ -7,6 +7,7 @@ import pickle
 import yaml
 import logging
 import json
+import tensorflow_datasets as tfds
 
 from preprocessing import kor_preprocessing as kp
 from model.cnn import BasicCnnClassification, CharCnnClassification
@@ -20,12 +21,17 @@ tf.config.experimental.set_memory_growth(physical_devices[0], enable=True)
 
 
 def train_pipeline(file_path: str, model: str, setting: dict):
-    train_data = pd.read_csv(file_path, header=0, delimiter='\t')
     hyper_parameters = setting['hyper_parameters']
+    dataset = setting['dataset']
 
-    if setting['dataset'] == 'nsmc':
+    if dataset == 'nsmc':
+        train_data = pd.read_csv(file_path, header=0, delimiter='\t')
         train_text = list(train_data['document'])
         train_label = list(train_data['label'])
+    elif dataset == 'imdb':
+        train_ds = tfds.load('imdb_reviews', split='train', shuffle_files=True, data_dir=file_path)
+        train_text = [str(x['text']) for x in train_ds]
+        train_label = [int(x['label']) for x in train_ds]
     else:
         print('not yet implemented dataset')
         return 0
@@ -111,35 +117,38 @@ def single_prediction(file_path: str, model: str, setting: dict, text: str = Non
 
     if text is None:
         # file testing
-
-        test_data = pd.read_csv(file_path, header=0, delimiter='\t')
         if dataset == 'nsmc':
-            train_text = test_data['document']
+            test_data = pd.read_csv(file_path, header=0, delimiter='\t')
+            test_text = test_data['document']
             try:
-                train_label = test_data['label']
+                test_label = test_data['label']
             except KeyError:
-                train_label = None
+                test_label = None
 
+        elif dataset == 'imdb':
+            test_ds = tfds.load('imdb_reviews', split='test', shuffle_files=False, data_dir=file_path)
+            test_text = [str(x['text']) for x in test_ds]
+            test_label = [int(x['label']) for x in test_ds]
         else:
-            print('Other than nsmc is not implemented yet')
+            print('Other than nsmc, imdb is not implemented yet')
             return 0
     else:
-        train_text = [text]
-        train_label = None
+        test_text = [text]
+        test_label = None
 
     mode = setting['mode']
     load_route = os.path.abspath('trained/' + setting['name'])
     text_dict, label_dict = load_dicts(load_route)
 
     if mode == 'char':
-        train_in, train_out, char_dict, label_dict = kp.char_base_vectorize(train_text,
-                                                                            train_label,
+        train_in, train_out, char_dict, label_dict = kp.char_base_vectorize(test_text,
+                                                                            test_label,
                                                                             text_dict,
                                                                             label_dict,
                                                                             train=False)
     elif mode == 'token':
-        train_in, train_out, char_dict, label_dict = kp.kor_tokenizing(train_text,
-                                                                       train_label,
+        train_in, train_out, char_dict, label_dict = kp.kor_tokenizing(test_text,
+                                                                       test_label,
                                                                        text_dict,
                                                                        label_dict,
                                                                        train=False)

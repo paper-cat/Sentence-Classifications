@@ -3,6 +3,6 @@ nsmc:
   test: datasets/nsmc/ratings_test.txt
 
 imdb:
-  train: None
-  test: None
+  train: datasets/
+  test: datasets/
 
