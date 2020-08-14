@@ -9,8 +9,8 @@ import logging
 import json
 import tensorflow_datasets as tfds
 
-from preprocessing import kor_preprocessing as kp
-from model.cnn import BasicCnnClassification, CharCnnClassification
+from preprocessing import text_preprocessing as tp
+from model.cnn import CnnYoonKim, CharCnnClassification
 
 logging.disable(logging.WARNING)
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
@@ -24,24 +24,30 @@ def train_pipeline(file_path: str, model: str, setting: dict):
     hyper_parameters = setting['hyper_parameters']
     dataset = setting['dataset']
 
+    print('Preprocessing Text Data...')
     if dataset == 'nsmc':
         train_data = pd.read_csv(file_path, header=0, delimiter='\t')
         train_text = list(train_data['document'])
         train_label = list(train_data['label'])
     elif dataset == 'imdb':
         train_ds = tfds.load('imdb_reviews', split='train', shuffle_files=True, data_dir=file_path)
-        train_text = [str(x['text']) for x in train_ds]
+        train_text = [x['text'].numpy().decode() for x in train_ds]
         train_label = [int(x['label']) for x in train_ds]
     else:
         print('not yet implemented dataset')
         return 0
 
     mode = setting['mode']
-
     if mode == 'char':
-        train_in, train_out, char_dict, label_dict = kp.char_base_vectorize(train_text, train_label)
+        train_in, train_out, char_dict, label_dict = tp.char_base_vectorize(train_text, train_label)
     elif mode == 'token':
-        train_in, train_out, char_dict, label_dict = kp.kor_tokenizing(train_text, train_label)
+        if dataset == 'nsmc':
+            train_in, train_out, char_dict, label_dict = tp.tokenizing(train_text, train_label, language='kor')
+        elif dataset == 'imdb':
+            train_in, train_out, char_dict, label_dict = tp.tokenizing(train_text, train_label, language='eng')
+        else:
+            print('not implemented dataset came in')
+            return 0
     else:
         return 0
 
@@ -53,8 +59,8 @@ def train_pipeline(file_path: str, model: str, setting: dict):
     hyper_parameters['embed_input'] = len(char_dict)
     hyper_parameters['out_dim'] = len(label_dict)
 
-    if model == 'BasicCnnClassification'.lower():
-        train_model = BasicCnnClassification(hyper_parameters)
+    if model == 'CnnYoonKim'.lower():
+        train_model = CnnYoonKim(hyper_parameters)
     elif model == 'CharCnnClassification'.lower():
         train_model = CharCnnClassification(hyper_parameters)
     else:
@@ -67,6 +73,9 @@ def train_pipeline(file_path: str, model: str, setting: dict):
 
     # Need to run with various batch_sizes
     tf.config.experimental_run_functions_eagerly(True)
+
+    # train_model.build(input_shape=(hyper_parameters['batch_size'], len(train_in[0])))
+    # train_model.summary()
 
     history = train_model.fit(train_in, train_out,
                               epochs=hyper_parameters['epochs'],
@@ -115,6 +124,13 @@ def single_prediction(file_path: str, model: str, setting: dict, text: str = Non
     dataset = setting['dataset']
     mode = setting['mode']
 
+    if dataset == 'nsmc':
+        lang = 'kor'
+    elif dataset == 'imdb':
+        lang = 'eng'
+    else:
+        return 0
+
     if text is None:
         # file testing
         if dataset == 'nsmc':
@@ -136,22 +152,22 @@ def single_prediction(file_path: str, model: str, setting: dict, text: str = Non
         test_text = [text]
         test_label = None
 
-    mode = setting['mode']
     load_route = os.path.abspath('trained/' + setting['name'])
     text_dict, label_dict = load_dicts(load_route)
 
     if mode == 'char':
-        train_in, train_out, char_dict, label_dict = kp.char_base_vectorize(test_text,
+        train_in, train_out, char_dict, label_dict = tp.char_base_vectorize(test_text,
                                                                             test_label,
                                                                             text_dict,
                                                                             label_dict,
                                                                             train=False)
     elif mode == 'token':
-        train_in, train_out, char_dict, label_dict = kp.kor_tokenizing(test_text,
-                                                                       test_label,
-                                                                       text_dict,
-                                                                       label_dict,
-                                                                       train=False)
+        train_in, train_out, char_dict, label_dict = tp.tokenizing(test_text,
+                                                                   test_label,
+                                                                   text_dict,
+                                                                   label_dict,
+                                                                   train=False,
+                                                                   language=lang)
     else:
         return 0
 
@@ -162,8 +178,8 @@ def single_prediction(file_path: str, model: str, setting: dict, text: str = Non
 
     hyper_parameters = setting['hyper_parameters']
 
-    if model == 'BasicCnnClassification'.lower():
-        prediction_model = BasicCnnClassification(hyper_parameters)
+    if model == 'CnnYoonKim'.lower():
+        prediction_model = CnnYoonKim(hyper_parameters)
     elif model == 'CharCnnClassification'.lower():
         prediction_model = CharCnnClassification(hyper_parameters)
     else:
@@ -188,13 +204,15 @@ def single_prediction(file_path: str, model: str, setting: dict, text: str = Non
         accuracy = tf.reduce_mean(tf.cast(equality, tf.float32))
         tf.print('Test file Accuracy : ', accuracy)
 
-    else:
-        print('수치:', probs)
+    elif dataset in ['nsmc', 'imdb']:
+        print('Probability:', probs[np.argmax(result)])
         if result[0] == 0:
-            print("부정적!")
+            print("Negative!")
         else:
-            print("긍정적!")
-        tf.print(result)
+            print("Positive!")
+            # tf.print(result)
+    else:
+        return 0
 
 
 def save_dicts(text_dict: dict, label_dict: dict, route: str):

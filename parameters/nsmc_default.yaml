@@ -1,6 +1,6 @@
 name: nsmc_default
 mode: char
-model: BasicCnnClassification
+model: CnnYoonKim
 dataset: nsmc
 test_ratio: 0.3
 max_len : 100

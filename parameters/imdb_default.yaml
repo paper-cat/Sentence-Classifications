@@ -1,0 +1,19 @@
+name: imdb_default
+mode: char
+model: CnnYoonKim
+dataset: imdb
+test_ratio: 0.3
+max_len: 300
+hyper_parameters:
+  learning_rate: 0.0005
+  epochs: 50
+  batch_size: 1024
+  embedding: 128
+  cnn_filters: 128
+  kernel_size:
+    - 2
+    - 3
+    - 4
+    - 5
+  dropout: 0.3
+  hidden_units: 1024

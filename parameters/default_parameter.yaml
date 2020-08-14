@@ -1,4 +1,6 @@
 name: defulat_paramter
+model: CnnYoonKim
+mode: char
 test_ratio: 0.3
 max_len : 100
 hyper_parameters:

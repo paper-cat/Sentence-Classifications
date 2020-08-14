@@ -11,13 +11,13 @@ if __name__ == '__main__':
     '''
 
     # 설정 가능한 model / mode 리스트
-    model_list = ['BasicCnnClassification', 'CharCnnClassification']
+    model_list = ['CnnYoonKim', 'CharCnnClassification']
     mode_list = ['char', 'token']
     dataset_list = ['nsmc', 'imdb']
 
     if len(sys.argv) == 1:
         sys.exit('No config file provided')
-
+        # sys.argv.append('imdb_token.yaml')
     try:
         path = os.path.abspath('parameters/' + sys.argv[1])
 
@@ -58,7 +58,7 @@ if __name__ == '__main__':
 
     # hyper parameter 없으면, default 값에서 가져옴
     except KeyError:
-        if model == 'BasicCnnClassification' or model == 'CharCnnClassification':
+        if model == 'CnnYoonKim' or model == 'CharCnnClassification':
             path = os.path.abspath('parameters/default_parameter.yaml')
             with open(path, encoding='UTF-8') as f:
                 default_setting = yaml.load(file, Loader=yaml.FullLoader)
