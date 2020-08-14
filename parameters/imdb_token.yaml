@@ -1,0 +1,18 @@
+name: imdb_token
+mode: token
+model: CnnYoonKim
+dataset: imdb
+test_ratio: 0.3
+max_len: 200
+hyper_parameters:
+  learning_rate: 0.0002
+  epochs: 30
+  batch_size: 1024
+  embedding: 100
+  cnn_filters: 100
+  kernel_size:
+    - 3
+    - 4
+    - 5
+  dropout: 0.5
+  hidden_units: 512

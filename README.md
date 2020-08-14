@@ -7,7 +7,8 @@ Implements some sentence(text) classification models by Tensorflow 2
 Using tensorflow2.1
 
 
-### Models
+## Models
+
 ---
 1. Convolutional Neural Networks for Sentence Classification by Yoon Kim - https://arxiv.org/pdf/1408.5882v2.pdf
     
@@ -15,56 +16,47 @@ Using tensorflow2.1
  
 ... And More In Future
 
-### How To Run Train
+## How To Run Train
+
 ---
+template:
 <pre><code>python train.py config-file</code></pre>
 
-example.
+example:
 
-<pre><code>python train.py nsmc_default.yaml</code></pre>
+<pre><code>python train.py imdb_default.yaml</code></pre>
 
 
-### How To Run Test (predict)
+## How To Run Test (predict)
+
 ---
 1. Run Bundle test for get accuracy
 <pre><code>python predict.py config-file</code></pre>
 
 2. Run A Sentence Prediction
 <pre><code>python predict.py config-file TYPE A SENTENCE AFTER CONFIG FILE</code></pre>
-<pre><code>python predict.py config-file 이 영화 꿀잼이네!</code></pre>
+example:
+<pre><code>python predict.py imdb_token I love this movie!</code></pre>
 
 
 
-### DataSet
+## DataSet
 ---
 1. Naver sentiment movie corpus v1.0 - https://github.com/e9t/nsmc/
     - nsmc_default.yaml
     - nsmc_custom.yaml
+    - nsmc_tokens.yaml
   
-2. Future Data Set:
-    - IMDb 
-
-*** Put datasets in this directories.
-
-dataset
-- nsmc
-    - ratings.txt
-    - ratings_train.txt
-    - ratings_test.txt
- - imbd_revies
-    - plain_text
-        - 1.0.0
-            - dataset_info.json
-            - imdb_reviews-test
-            - imdb_reviews-train
-            - label.labels.txt
+2. IMDB dataset
+    - imdb_default.yaml
+    - imdb_token.yaml
     
 
-### (Working On) Edit Config file to use your own dataset, hyper parameters
+## Edit or Add Config file to use your own dataset, hyper parameters
 ---
 1. mode
 - char : use character base vectorize
-- token : (korean Only for now ) use Korean Morphological Analyzer
+- token : use tokenizer Analyzer
 
 2. model
 - cnn-basic : Model List #1 by Yoon kim
@@ -72,10 +64,12 @@ dataset
 
 3. dataset:
 - nsmc : Naver Sentiment Movie Corpus by Lucy Park
+- imdb : Famous IMDB dataset
+
+4. parameters in default parameter.
 ---
 
-You Can Use Your own datasets by edit config file as YAML
+(working on...) You Can Use Your own datasets by edit config file as YAML
 1. Edit train_file_path to train file
-2. Choose train data type (txt, xlsx, ...)
-3. Choose model type
-4. Tune Hyper parameters
+2. Choose model, mode, dataset type
+3. Tune Hyper parameters

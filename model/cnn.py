@@ -4,9 +4,9 @@ from tensorflow.keras.layers import Embedding, Conv1D, Dense, Dropout, GlobalMax
 
 
 # https://arxiv.org/pdf/1408.5882v2.pdf Yoon Kim
-class BasicCnnClassification(tf.keras.Model):
+class CnnYoonKim(tf.keras.Model):
     def __init__(self, args: dict):
-        super(BasicCnnClassification, self).__init__()
+        super(CnnYoonKim, self).__init__()
 
         self.embed_input = args['embed_input']
         self.embed_out = args['embedding']

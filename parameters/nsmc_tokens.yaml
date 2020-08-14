@@ -13,6 +13,6 @@ hyper_parameters:
   learning_rate: 0.0001
 max_len: 100
 mode: token
-model: BasicCnnClassification
+model: CnnYoonKim
 name: nsmc_tokens
 test_ratio: 0.3
