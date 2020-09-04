@@ -1,4 +1,5 @@
 # 문장 분류
+![HitCount](http://hits.dwyl.com/{readme_kor}.svg)
 여러 문장 분류 모델들을 Tensorflow 2 로 구현하고 있습니다
 
 ### 구현 모델
