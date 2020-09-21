@@ -1,5 +1,4 @@
 # Sentence-Classifications
-![HitCount](http://hits.dwyl.com/{readme_en}.svg)
 [-한국어버전-](https://github.com/paper-cat/Sentence-Classifications/blob/master/KOR_README.md)
 
 Implements some sentence(text) classification models by Tensorflow 2
