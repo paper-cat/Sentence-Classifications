@@ -15,9 +15,9 @@ from model.cnn import CnnYoonKim, CharCnnClassification
 logging.disable(logging.WARNING)
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
 
-physical_devices = tf.config.list_physical_devices('GPU')
-print("Num GPUs Available: ", len(tf.config.experimental.list_physical_devices('GPU')))
-tf.config.experimental.set_memory_growth(physical_devices[0], enable=True)
+# physical_devices = tf.config.list_physical_devices('GPU')
+# print("Num GPUs Available: ", len(tf.config.experimental.list_physical_devices('GPU')))
+# tf.config.experimental.set_memory_growth(physical_devices[0], enable=True)
 
 
 def train_pipeline(file_path: str, model: str, setting: dict):
