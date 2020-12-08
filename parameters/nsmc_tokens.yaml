@@ -5,7 +5,7 @@ hyper_parameters:
   dropout: 0.5
   embedding: 128
   epochs: 10
-  hidden_units: 512
+  hidden_units: 1024
   kernel_size:
   - 3
   - 4

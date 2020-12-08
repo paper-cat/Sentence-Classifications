@@ -208,11 +208,12 @@ def single_prediction(file_path: str, model: str, setting: dict, text: str = Non
         print('Probability:', probs[np.argmax(result)])
         if result[0] == 0:
             print("Negative!")
+            return 0
         else:
             print("Positive!")
-            # tf.print(result)
+            return 1
     else:
-        return 0
+        return None
 
 
 def save_dicts(text_dict: dict, label_dict: dict, route: str):

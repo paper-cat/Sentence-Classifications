@@ -1,5 +1,4 @@
 import tensorflow as tf
-import numpy as np
 from tensorflow.keras.layers import Embedding, Conv1D, Dense, Dropout, GlobalMaxPool1D, MaxPooling1D, Flatten
 
 
@@ -67,10 +66,10 @@ class CharCnnClassification(tf.keras.Model):
 
         self.flat = Flatten()
         self.dropout1 = Dropout(self.dropout_rate)
-        self.dropout2 = Dropout(self.dropout_rate)
+        # self.dropout2 = Dropout(self.dropout_rate)
 
-        self.fcn1 = Dense(self.hidden_units, 'relu')
-        self.fcn2 = Dense(self.hidden_units, 'relu')
+        self.fcn1 = Dense(self.hidden_units, activation='relu', activity_regularizer='l2')
+        # self.fcn2 = Dense(self.hidden_units, 'relu')
         self.out_fcn = Dense(self.out_dim, 'softmax')
 
     @tf.function
@@ -85,8 +84,8 @@ class CharCnnClassification(tf.keras.Model):
         x = self.flat(x)
         x = self.fcn1(x)
         x = self.dropout1(x)
-        x = self.fcn2(x)
-        x = self.dropout2(x)
+        # x = self.fcn2(x)
+        # x = self.dropout2(x)
         x = self.out_fcn(x)
 
         return x
