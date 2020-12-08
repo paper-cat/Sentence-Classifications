@@ -7,8 +7,8 @@ import os
 
 
 def test_predict():
-    # sys.argv = ['predict.py', 'nsmc_tokens', '존잼!']
-    sys.argv = ['predict.py', 'imdb_token', 'Great', 'Movie']
+    sys.argv = ['predict.py', 'nsmc_tokens', '존잼!']
+    # sys.argv = ['predict.py', 'imdb_token', 'Great', 'Movie']
 
     path = os.path.abspath('trained/' + sys.argv[1])
 
@@ -28,11 +28,11 @@ def test_predict():
     print(text)
 
     with open(path + '/' + sys.argv[1] + '_setting.yaml', encoding='UTF-8') as file:
-        setting = yaml.load(file, Loader=yaml.FullLoader)
+        setting = dict(yaml.load(file, Loader=yaml.FullLoader))
         print(setting)
 
-        model = setting['model'].lower()
-        dataset = setting['dataset'].lower()
+    model = setting['model'].lower()
+    dataset = setting['dataset'].lower()
 
     path = os.path.abspath('datasets/dataset_setting.yaml')
     with open(path, encoding='UTF-8') as file:
@@ -49,3 +49,7 @@ def test_predict():
     result = pp.single_prediction(test_path, model, setting, text)
 
     assert result == 1
+
+
+if __name__ == '__main__':
+    test_predict()

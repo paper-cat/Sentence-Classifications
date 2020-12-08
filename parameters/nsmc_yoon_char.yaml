@@ -1,0 +1,18 @@
+name: nsmc_default
+mode: char
+model: CnnYoonKim
+dataset: nsmc
+test_ratio: 0.3
+max_len : 200
+hyper_parameters:
+  learning_rate: 0.001
+  epochs: 20
+  batch_size: 1024
+  embedding: 128
+  cnn_filters: 128
+  kernel_size:
+      - 3
+      - 4
+      - 5
+  dropout: 0.5
+  hidden_units: 1024
