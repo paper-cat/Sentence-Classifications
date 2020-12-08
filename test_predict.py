@@ -28,8 +28,9 @@ def test_predict():
     print(text)
 
     with open(path + '/' + sys.argv[1] + '_setting.yaml', encoding='UTF-8') as file:
-        setting = dict(yaml.load(file, Loader=yaml.FullLoader))
-        print(setting)
+
+        setting = dict()
+        setting = yaml.load(file, Loader=yaml.FullLoader)
 
     model = setting['model'].lower()
     dataset = setting['dataset'].lower()
