@@ -1,3 +1,5 @@
+# -*-coding:utf-8-*-
+
 import sys
 import pipeline as pp
 import yaml
@@ -5,7 +7,9 @@ import os
 
 
 def test_predict():
-    sys.argv = ['predict.py', 'nsmc_tokens', '존잼!']
+    # sys.argv = ['predict.py', 'nsmc_tokens', '존잼!']
+    sys.argv = ['predict.py', 'imdb_token', 'Great', 'Movie']
+
     path = os.path.abspath('trained/' + sys.argv[1])
 
     # argument 이후의 str 을 하나의 문장으로
